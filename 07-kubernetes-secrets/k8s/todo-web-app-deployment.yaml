@@ -26,7 +26,10 @@ spec:
             - name: RDS_HOSTNAME
               value: mysql
             - name: RDS_PASSWORD
-              value: dummytodos
+              valueFrom:
+                secretKeyRef:
+                  key: RDS_PASSWORD
+                  name: todo-web-app-secret
             - name: RDS_PORT
               valueFrom:
                 configMapKeyRef:

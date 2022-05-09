@@ -2,19 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: todo-web-app
-  name: todo-web-app
+    app: todo-web-app-azure-mysql
+  name: todo-web-app-azure-mysql
   namespace: default
 spec:
   replicas: 1
   minReadySeconds: 45
   selector:
     matchLabels:
-      app: todo-web-app
+      app: todo-web-app-azure-mysql
   template:
     metadata:
       labels:
-        app: todo-web-app
+        app: todo-web-app-azure-mysql
     spec:
       containers:
         - env:
@@ -22,25 +22,28 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: RDS_DB_NAME
-                  name: todo-web-app-config
+                  name: todo-web-app-azure-mysql-config
             - name: RDS_HOSTNAME
-              value: mysql
+              value: azure-mysql
             - name: RDS_PASSWORD
-              value: dummytodos
+              valueFrom:
+                secretKeyRef:
+                  key: RDS_PASSWORD
+                  name: todo-web-app-azure-mysql-secret
             - name: RDS_PORT
               valueFrom:
                 configMapKeyRef:
                   key: RDS_PORT
-                  name: todo-web-app-config
+                  name: todo-web-app-azure-mysql-config
             - name: RDS_USERNAME
               valueFrom:
                 configMapKeyRef:
                   key: RDS_USERNAME
-                  name: todo-web-app-config
-          name: todo-web-app
-          image: alexisgf/todo-web-application-mysql:0.0.2-SNAPSHOT
+                  name: todo-web-app-azure-mysql-config
+          name: todo-web-app-azure-mysql
+          image: alexisgf/todo-web-application-mysql:0.0.3-SNAPSHOT
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
-              name: todo-web-app
+              name: todo-web-azure
       restartPolicy: Always

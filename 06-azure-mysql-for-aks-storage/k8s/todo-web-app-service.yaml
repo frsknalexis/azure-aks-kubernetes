@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: todo-web-app-azure-mysql
+  name: todo-web-app-azure-mysql
+  namespace: default
+spec:
+  type: LoadBalancer
+  selector:
+    app: todo-web-app-azure-mysql
+  ports:
+    - port: 8080
+      targetPort: 8080
