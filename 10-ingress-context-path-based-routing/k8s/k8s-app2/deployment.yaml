@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-app2
+  name: nginx-app2
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-app2
+  template:
+    metadata:
+      labels:
+        app: nginx-app2
+    spec:
+      containers:
+        - name: nginx-app2
+          image: stacksimplify/kube-nginxapp2:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: nginx-app2
+      restartPolicy: Always

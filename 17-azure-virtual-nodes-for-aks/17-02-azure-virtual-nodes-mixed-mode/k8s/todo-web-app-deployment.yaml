@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: todo-web-app
+  name: todo-web-app
+  namespace: default
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: todo-web-app
+  template:
+    metadata:
+      labels:
+        app: todo-web-app
+    spec:
+      containers:
+        - env:
+            - name: RDS_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: RDS_DB_NAME
+                  name: todo-web-app-config
+            - name: RDS_HOSTNAME
+              value: mysql.default.svc.cluster.local
+            - name: RDS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: RDS_PASSWORD
+                  name: todo-web-app-secret
+            - name: RDS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: RDS_PORT
+                  name: todo-web-app-config
+            - name: RDS_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: RDS_USERNAME
+                  name: todo-web-app-config
+          name: todo-web-app
+          image: alexisgf/todo-web-application-mysql:0.0.2-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: todo-web-app
+      restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/role: agent
+        kubernetes.io/os: linux
+        type: virtual-kubelet
+      tolerations:
+        - key: virtual-kubelet.io/provider
+          operator: Exists
+        - key: azure.com/aci
+          effect: NoSchedule

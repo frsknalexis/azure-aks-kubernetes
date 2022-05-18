@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: currency-exchange
+  name: currency-exchange
+  namespace: default
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: currency-exchange
+  template:
+    metadata:
+      labels:
+        app: currency-exchange
+    spec:
+      containers:
+        - name: currency-exchange
+          image: alexisgf/currency-exchange:0.0.2-RELEASE
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              name: c-exchange-port
+      restartPolicy: Always

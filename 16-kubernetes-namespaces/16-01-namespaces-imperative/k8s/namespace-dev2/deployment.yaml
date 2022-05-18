@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-app1
+  name: nginx-app1
+  namespace: dev2
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: nginx-app1
+  template:
+    metadata:
+      labels:
+        app: nginx-app1
+    spec:
+      containers:
+        - name: nginx-app1
+          image: stacksimplify/kube-nginxapp1:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: nginx-app1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+      restartPolicy: Always

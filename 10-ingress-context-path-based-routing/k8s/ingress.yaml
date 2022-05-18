@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: nginx-app1
+  name: nginx-app1-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /app1/
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-app1
+                port:
+                  number: 80
+          - path: /app2/
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-app2
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: currency-exchange
+                port:
+                  number: 8000
