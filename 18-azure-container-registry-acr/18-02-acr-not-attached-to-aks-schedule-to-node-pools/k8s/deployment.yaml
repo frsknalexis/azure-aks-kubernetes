@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-acr-app2
+  name: nginx-acr-app2
+  namespace: default
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: nginx-acr-app2
+  template:
+    metadata:
+      labels:
+        app: nginx-acr-app2
+    spec:
+      containers:
+        - name: nginx-acr-app2
+          image: acrforakscluster2.azurecr.io/app2/kube-nginx-acr-app2:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: nginx-acr-app2
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: acr-aks-secret

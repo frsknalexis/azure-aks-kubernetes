@@ -49,7 +49,7 @@ spec:
       restartPolicy: Always
       nodeSelector:
         kubernetes.io/role: agent
-        kubernetes.io/os: linux
+        beta.kubernetes.io/os: linux
         type: virtual-kubelet
       tolerations:
         - key: virtual-kubelet.io/provider

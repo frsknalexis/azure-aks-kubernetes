@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-acr-app3
+  name: nginx-acr-app3
+  namespace: default
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: nginx-acr-app3
+  template:
+    metadata:
+      labels:
+        app: nginx-acr-app3
+    spec:
+      containers:
+        - name: nginx-acr-app3
+          image: acrforakscluster2.azurecr.io/app3/kube-nginx-acr-app3:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: nginx-acr-app3
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: acr-aks-secret
+      nodeSelector:
+        kubernetes.io/role: agent
+        beta.kubernetes.io/os: linux
+        type: virtual-kubelet
+      tolerations:
+        - key: virtual-kubelet.io/provider
+          operator: Exists
+        - key: azure.com/aci
+          effect: NoSchedule
